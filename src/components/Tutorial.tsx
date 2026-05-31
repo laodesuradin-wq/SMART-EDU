@@ -50,16 +50,22 @@ export function Tutorial({ module, onBack, onFinish }: TutorialProps) {
   };
 
   const toggleAudio = (text: string) => {
-     if (!('speechSynthesis' in window)) {
-        alert("Browser tidak mendukung fitur suara.");
-        return;
+     if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
      }
      
      if (isPlayingAudio) {
-       window.speechSynthesis.cancel();
        setIsPlayingAudio(false);
      } else {
-       window.speechSynthesis.cancel(); // Clear any pending speech
+       if (currentStep.audioUrl) {
+         setIsPlayingAudio(true);
+         return;
+       }
+       
+       if (!('speechSynthesis' in window)) {
+          alert("Browser tidak mendukung fitur suara.");
+          return;
+       }
        
        const utterance = new SpeechSynthesisUtterance(text);
        utterance.lang = 'id-ID';
@@ -224,6 +230,16 @@ export function Tutorial({ module, onBack, onFinish }: TutorialProps) {
               <h3 className="font-display font-bold text-sm md:text-xl text-shadow mb-0.5 md:mb-1">Sesi Interaktif: {module.title}</h3>
               <p className="text-emerald-400 text-[10px] md:text-sm font-medium animate-pulse">{isPlayingAudio ? "Sesi 30 Menit: Tutor AI Sandra sedang menyampaikan materi..." : "Sesi 30 Menit: Tutor AI siap menyampaikan materi"}</p>
             </div>
+            
+            {/* Hidden YouTube Iframe for Audio */}
+            {isPlayingAudio && currentStep.audioUrl && (
+              <iframe 
+                src={currentStep.audioUrl} 
+                allow="autoplay" 
+                className="w-0 h-0 absolute opacity-0 pointer-events-none"
+                title="Hidden Audio Player"
+              />
+            )}
           </div>
         )}
 

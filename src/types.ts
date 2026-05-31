@@ -20,6 +20,7 @@ export type Subject = {
     title: string;
     detail: string;
     imageUrl?: string;
+    audioUrl?: string;
   }[];
 };
 
