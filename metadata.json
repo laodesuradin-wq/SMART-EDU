@@ -1,0 +1,6 @@
+{
+  "name": "Siak Mobile Interaktif",
+  "description": "Media pembelajaran interaktif layanan kependudukan Siak Mobile bersama Asisten Sandra.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
