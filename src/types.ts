@@ -4,9 +4,10 @@ export type QuizQuestion = {
   options: string[];
   correctAnswerIndex: number;
   explanation: string;
+  subjectTitle?: string;
 };
 
-export type ViewState = 'home' | 'learn' | 'subjects' | 'tutorial' | 'quiz' | 'chat' | 'leaderboard';
+export type ViewState = 'home' | 'learn' | 'subjects' | 'tutorial' | 'quiz' | 'chat' | 'leaderboard' | 'profile' | 'users' | 'classroom';
 
 export type Subject = {
   id: string;
@@ -39,8 +40,11 @@ export type ChatMessage = {
 };
 
 export type UserProgress = {
+  id: string;
   name: string;
   points: number;
   level: number;
   completedModules: string[];
+  dailyGoal: number;
+  dailyProgress: number;
 };

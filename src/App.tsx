@@ -6,49 +6,126 @@ import { Tutorial } from "./components/Tutorial";
 import { Quiz } from "./components/Quiz";
 import { Chat } from "./components/Chat";
 import { Leaderboard } from "./components/Leaderboard";
+import { Profile } from "./components/Profile";
+import { UsersList } from "./components/UsersList";
+import { Classroom } from "./components/Classroom";
 import { motion, AnimatePresence } from "motion/react";
-import { Home, BookOpen, PenTool, MessageCircle, Star, Crown, Zap, Trophy, Sparkles } from "lucide-react";
+import { Home, BookOpen, PenTool, MessageCircle, Star, Crown, Zap, Trophy, Sparkles, User, Users } from "lucide-react";
 
 export default function App() {
-  const [view, setView] = useState<ViewState>("home");
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
   const [activeSubjectId, setActiveSubjectId] = useState<string | null>(null);
 
-  const [user, setUser] = useState<UserProgress>(() => {
-    const saved = localStorage.getItem("siak_user");
+  const [users, setUsers] = useState<UserProgress[]>(() => {
+    const saved = localStorage.getItem("siak_users");
     if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved user state", e);
-      }
+      try { return JSON.parse(saved); } catch (e) { console.error(e); }
     }
-    return {
+    const legacy = localStorage.getItem("siak_user");
+    if (legacy) {
+      try {
+        const parsed = JSON.parse(legacy);
+        parsed.id = "user_1";
+        parsed.dailyGoal = parsed.dailyGoal || 500;
+        parsed.dailyProgress = parsed.dailyProgress || 0;
+        return [parsed];
+      } catch(e) {}
+    }
+    return [{
+      id: "user_1",
       name: "Pelajar Hebat",
       points: 1250,
       level: 5,
-      completedModules: []
-    };
+      completedModules: [],
+      dailyGoal: 500,
+      dailyProgress: 0
+    }];
   });
 
+  const [currentUserId, setCurrentUserId] = useState<string>(() => {
+    return localStorage.getItem("siak_current_user_id") || "user_1";
+  });
+
+  const [view, setView] = useState<ViewState>(() => {
+    return localStorage.getItem("siak_current_user_id") ? "home" : "users";
+  });
+
+  const user = users.find(u => u.id === currentUserId) || users[0];
+
+  const setUser = (updater: UserProgress | ((prev: UserProgress) => UserProgress)) => {
+    setUsers(prev => {
+      const idx = prev.findIndex(u => u.id === currentUserId);
+      if (idx === -1) return prev;
+      const nextUser = typeof updater === 'function' ? updater(prev[idx]) : updater;
+      const newUsers = [...prev];
+      newUsers[idx] = nextUser;
+      return newUsers;
+    });
+  };
+
   useEffect(() => {
-    localStorage.setItem("siak_user", JSON.stringify(user));
-  }, [user]);
+    localStorage.setItem("siak_users", JSON.stringify(users));
+  }, [users]);
+
+  useEffect(() => {
+    localStorage.setItem("siak_current_user_id", currentUserId);
+  }, [currentUserId]);
 
   const activeModule = modules.find(m => m.id === activeModuleId) || modules[0];
   const activeSubject = activeModule?.subjects.find(s => s.id === activeSubjectId) || null;
 
+  let displayQuizzes = quizzes;
+  if (activeSubject) {
+     const matched = quizzes.filter(q => q.subjectTitle === activeSubject.title);
+     if (matched.length > 0) displayQuizzes = matched;
+  }
+  displayQuizzes = displayQuizzes.slice(0, 5);
+
   const handleFinishTutorial = (id: string) => {
     if (!user.completedModules.includes(id)) {
-      setUser(prev => ({ ...prev, points: prev.points + 100, completedModules: [...prev.completedModules, id] }));
+      setUser(prev => ({ ...prev, points: prev.points + 100, dailyProgress: prev.dailyProgress + 100, completedModules: [...prev.completedModules, id] }));
     }
     setView("learn");
   };
 
   const handleFinishQuiz = (score: number) => {
-    setUser(prev => ({ ...prev, points: prev.points + score * 50 }));
+    setUser(prev => ({ ...prev, points: prev.points + score * 50, dailyProgress: prev.dailyProgress + score * 50 }));
     setView("home");
   };
+
+  if (view === "users") {
+    return (
+      <div className="min-h-screen bg-slate-50 overflow-y-auto">
+        <UsersList 
+          users={users} 
+          currentUserId={currentUserId}
+          onSelectUser={(id) => {
+            setCurrentUserId(id);
+            setView("home");
+          }}
+          onCreateUser={(name) => {
+            const newUser = {
+              id: `user_${Date.now()}`,
+              name,
+              points: 0,
+              level: 1,
+              completedModules: [],
+              dailyGoal: 500,
+              dailyProgress: 0
+            };
+            setUsers([...users, newUser]);
+          }}
+          onDeleteUser={(id) => {
+            const nextUsers = users.filter((u) => u.id !== id);
+            setUsers(nextUsers);
+            if (id === currentUserId) {
+              setCurrentUserId(nextUsers[0].id);
+            }
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col md:flex-row">
@@ -68,8 +145,21 @@ export default function App() {
           <NavItem icon={<Home />} label="Beranda" active={view === "home"} onClick={() => setView("home")} />
           <NavItem icon={<BookOpen />} label="Ruang Belajar" active={view === "learn" || view === "tutorial"} onClick={() => setView("learn")} />
           <NavItem icon={<PenTool />} label="Latihan" active={view === "quiz"} onClick={() => setView("quiz")} />
+          <NavItem icon={<Users />} label="Kelasku" active={view === "classroom"} onClick={() => setView("classroom")} />
           <NavItem icon={<MessageCircle />} label="Tanya Sandra" active={view === "chat"} onClick={() => setView("chat")} />
           <NavItem icon={<Trophy />} label="Peringkat" active={view === "leaderboard"} onClick={() => setView("leaderboard")} />
+          <NavItem icon={<User />} label="Profil" active={view === "profile"} onClick={() => setView("profile")} />
+          <div className="mt-auto pt-4 border-t border-slate-100">
+            <button 
+              onClick={() => setView("users")}
+              className="flex w-full items-center gap-3 px-4 py-3.5 rounded-2xl transition-all font-semibold text-left text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+            >
+              <div className="[&>svg]:w-5 [&>svg]:h-5 [&>svg]:text-slate-400">
+                <User />
+              </div>
+              Ganti Akun
+            </button>
+          </div>
         </nav>
       </aside>
 
@@ -91,6 +181,9 @@ export default function App() {
             <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
             {user.points}
           </div>
+          <button onClick={() => setView("profile")} className="w-8 h-8 ml-2 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600">
+            <User className="w-4 h-4" />
+          </button>
         </header>
 
         <div className="w-full flex-1 p-4 md:p-8 md:overflow-y-auto">
@@ -120,26 +213,44 @@ export default function App() {
                       <h2 className="text-indigo-200/80 text-sm font-medium mb-1">Selamat Datang,</h2>
                       <h3 className="font-display font-bold text-3xl md:text-5xl mb-6 tracking-tight text-white/95">{user.name}</h3>
                       
-                      <div className="flex flex-wrap gap-4">
-                         <div className="bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl flex items-center gap-4 border border-white/10 shadow-inner">
-                           <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                              <Star className="w-6 h-6 text-white fill-current" />
+                      <div className="flex flex-col gap-5 mt-2">
+                        <div className="flex flex-wrap gap-4">
+                           <div className="bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl flex items-center gap-4 border border-white/10 shadow-inner">
+                             <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                                <Star className="w-6 h-6 text-white fill-current" />
+                             </div>
+                             <div>
+                               <p className="text-indigo-200/80 text-[10px] uppercase tracking-wider font-semibold">Total Poin</p>
+                               <p className="font-bold text-xl tracking-tight">{user.points} <span className="text-base text-indigo-300 font-medium">XP</span></p>
+                             </div>
                            </div>
-                           <div>
-                             <p className="text-indigo-200/80 text-[10px] uppercase tracking-wider font-semibold">Total Poin</p>
-                             <p className="font-bold text-xl tracking-tight">{user.points} <span className="text-base text-indigo-300 font-medium">XP</span></p>
+                           
+                           <div className="bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl flex items-center gap-4 border border-white/10 shadow-inner">
+                             <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
+                                <Zap className="w-6 h-6 text-white fill-current" />
+                             </div>
+                             <div>
+                               <p className="text-indigo-200/80 text-[10px] uppercase tracking-wider font-semibold">Level</p>
+                               <p className="font-bold text-xl tracking-tight">Lv {user.level}</p>
+                             </div>
                            </div>
-                         </div>
-                         
-                         <div className="bg-white/5 backdrop-blur-md px-5 py-3 rounded-2xl flex items-center gap-4 border border-white/10 shadow-inner">
-                           <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-xl flex items-center justify-center shadow-lg">
-                              <Zap className="w-6 h-6 text-white fill-current" />
+                        </div>
+
+                        {/* Daily Progress */}
+                        <div className="bg-white/5 backdrop-blur-md px-5 py-4 rounded-2xl border border-white/10 shadow-inner w-full sm:max-w-md">
+                           <div className="flex justify-between items-end mb-2">
+                              <p className="text-indigo-200/80 text-xs font-semibold">Target Belajar Harian</p>
+                              <p className="font-bold text-sm text-lime-400">{user.dailyProgress} / {user.dailyGoal} XP</p>
                            </div>
-                           <div>
-                             <p className="text-indigo-200/80 text-[10px] uppercase tracking-wider font-semibold">Level</p>
-                             <p className="font-bold text-xl tracking-tight">Lv {user.level}</p>
+                           <div className="w-full h-2 bg-indigo-950/80 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-gradient-to-r from-lime-400 to-emerald-500 rounded-full"
+                                initial={{ width: "0%" }}
+                                animate={{ width: `${Math.min(100, Math.round((user.dailyProgress / user.dailyGoal) * 100))}%` }}
+                                transition={{ duration: 1, ease: 'easeOut', delay: 0.2 }}
+                              />
                            </div>
-                         </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -293,10 +404,16 @@ export default function App() {
                   onBack={() => setView("subjects")}
                   onFinish={() => {
                      if (!user.completedModules.includes(activeSubject.id)) {
-                       setUser(prev => ({ ...prev, points: prev.points + 100, completedModules: [...prev.completedModules, activeSubject.id] }));
+                       setUser(prev => ({ ...prev, points: prev.points + 100, dailyProgress: prev.dailyProgress + 100, completedModules: [...prev.completedModules, activeSubject.id] }));
                      }
                      setView("subjects");
-                  }} 
+                  }}
+                  onGoToQuiz={() => {
+                     if (!user.completedModules.includes(activeSubject.id)) {
+                       setUser(prev => ({ ...prev, points: prev.points + 100, dailyProgress: prev.dailyProgress + 100, completedModules: [...prev.completedModules, activeSubject.id] }));
+                     }
+                     setView("quiz");
+                  }}
                 />
               </motion.div>
             )}
@@ -311,10 +428,23 @@ export default function App() {
                 className="w-full"
              >
                <Quiz 
-                questions={quizzes} 
+                questions={displayQuizzes} 
                 onFinish={handleFinishQuiz} 
                />
              </motion.div>
+            )}
+
+            {/* CLASSROOM VIEW */}
+            {view === "classroom" && (
+               <motion.div
+                key="classroom"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="w-full"
+               >
+                 <Classroom user={user} />
+               </motion.div>
             )}
 
             {/* CHAT VIEW */}
@@ -346,6 +476,23 @@ export default function App() {
                </motion.div>
             )}
             
+            {/* PROFILE VIEW */}
+            {view === "profile" && (
+               <motion.div
+                key="profile"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="w-full h-full pb-4"
+               >
+                 <Profile 
+                   user={user} 
+                   onUpdateUser={setUser}
+                   onSwitchUser={() => setView("users")}
+                 />
+               </motion.div>
+            )}
+            
           </AnimatePresence>
         </div>
       </main>
@@ -356,8 +503,10 @@ export default function App() {
           <MobileNavItem icon={<Home />} label="Beranda" active={view === "home"} onClick={() => setView("home")} />
           <MobileNavItem icon={<BookOpen />} label="Belajar" active={view === "learn" || view === "tutorial"} onClick={() => setView("learn")} />
           <MobileNavItem icon={<PenTool />} label="Latihan" active={view === "quiz"} onClick={() => setView("quiz")} />
+          <MobileNavItem icon={<Users />} label="Kelasku" active={view === "classroom"} onClick={() => setView("classroom")} />
           <MobileNavItem icon={<Trophy />} label="Peringkat" active={view === "leaderboard"} onClick={() => setView("leaderboard")} />
           <MobileNavItem icon={<MessageCircle />} label="Tanya" active={view === "chat"} onClick={() => setView("chat")} />
+          <MobileNavItem icon={<User />} label="Profil" active={view === "profile"} onClick={() => setView("profile")} />
         </div>
       </nav>
 

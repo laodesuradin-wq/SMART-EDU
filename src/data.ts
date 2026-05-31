@@ -93,42 +93,39 @@ export const modules: ServiceModule[] = Array.from({ length: 12 }, (_, i) => {
 });
 
 export const quizzes: QuizQuestion[] = [
-  {
-    id: "q1",
-    question: "Apa langkah yang paling penting saat melakukan Registrasi Akun baru untuk memastikan keamanan data?",
-    options: [
-      "Membayar biaya pendaftaran",
-      "Melakukan Swafoto (Selfie) dengan memegang KTP",
-      "Menghubungi petugas via telepon",
-      "Memberikan password akun ke teman"
-    ],
-    correctAnswerIndex: 1,
-    explanation: "Swafoto dengan KTP memastikan bahwa yang mendaftar adalah pemilik sah dari identitas NIK tersebut, demi menghindari penipuan."
-  },
-  {
-    id: "q2",
-    question: "Dalam layanan Akta Kelahiran, dokumen utama yang menjadi syarat mutlak adalah...",
-    options: [
-      "Ijazah terakhir orang tua",
-      "Kartu Vaksin bayi",
-      "Surat Keterangan Lahir dari RS/Bidan",
-      "Akta Kelahiran Ayah"
-    ],
-    correctAnswerIndex: 2,
-    explanation: "Surat Keterangan Lahir adalah bukti otentik yang dikeluarkan pihak medis dan menjadi rujukan utama pembuatan Akta Kelahiran."
-  },
-  {
-    id: "q3",
-    question: "Jika ingin mengurus KTP yang hilang melalui Siak Mobile, dokumen pertama yang harus disiapkan adalah:",
-    options: [
-      "Kartu Keluarga asli terbaru",
-      "Surat Pindah (SKPWNI)",
-      "Surat Permohonan RT/RW",
-      "Surat Keterangan Kehilangan dari Kepolisian"
-    ],
-    correctAnswerIndex: 3,
-    explanation: "KTP yang hilang wajib dibuktikan dengan adanya laporan/Surat Keterangan Kehilangan dari pihak Kepolisian agar tidak disalahgunakan."
-  }
+  ...[
+    "Pendidikan Agama", "Pancasila", "Bahasa Indonesia", "Matematika", 
+    "IPAS", "IPA", "IPS", "Fisika", "Kimia", "Biologi", "Sosiologi", 
+    "Ekonomi", "Geografi", "Sejarah", "Bahasa Inggris", "PJOK", 
+    "Informatika", "Seni Budaya"
+  ].flatMap((subject, idx) => [
+    {
+      id: `q_${idx}_1`,
+      subjectTitle: subject,
+      question: `Pertanyaan dasar mengenai ${subject}. Apa yang menjadi fokus utama dalam pelajaran ini?`,
+      options: [
+        "Mempelajari konsep dasar keilmuan",
+        "Menghafal buku teks",
+        "Tidur di kelas",
+        "Bermain game"
+      ],
+      correctAnswerIndex: 0,
+      explanation: `Fokus utama pelajaran ${subject} adalah agar kita memahami konsep dasar keilmuan yang dapat diterapkan dalam kehidupan sehari-hari.`
+    },
+    {
+      id: `q_${idx}_2`,
+      subjectTitle: subject,
+      question: `Manakah dari berikut ini yang merupakan manfaat belajar ${subject}?`,
+      options: [
+        "Tidak ada manfaatnya",
+        "Untuk menambah wawasan dan keterampilan",
+        "Hanya untuk ujian",
+        "Membuat pusing"
+      ],
+      correctAnswerIndex: 1,
+      explanation: `Belajar ${subject} dapat menambah wawasan, pengetahuan, serta mengasah keterampilan berpikir kita.`
+    }
+  ])
 ];
 
 export const leaderboardData = [
