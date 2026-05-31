@@ -290,46 +290,46 @@ export default function App() {
 
                 {/* Quick Actions / Featured */}
                 <div className="mt-2">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <button
                       onClick={() => setView("learn")}
-                      className="bg-white border text-left border-slate-200 hover:border-indigo-300 p-6 rounded-[2rem] flex flex-col gap-6 transition-all shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 group relative overflow-hidden"
+                      className="bg-white border text-left border-slate-200 hover:border-indigo-300 p-5 rounded-[1.5rem] flex flex-col gap-4 transition-all shadow-sm hover:shadow-lg hover:shadow-indigo-500/10 group relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
-                      <div className="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 transition-transform group-hover:scale-110 shadow-inner">
-                        <BookOpen className="w-7 h-7" />
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
+                      <div className="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-600 transition-transform group-hover:scale-110 shadow-inner">
+                        <BookOpen className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-xl text-slate-800 group-hover:text-indigo-700 transition-colors mb-2">Ruang Belajar</h4>
-                        <p className="text-slate-500 text-sm font-medium leading-relaxed">Akses modul pembelajaran interaktif dan kelas live.</p>
+                        <h4 className="font-display font-bold text-lg text-slate-800 group-hover:text-indigo-700 transition-colors mb-1.5">Ruang Belajar</h4>
+                        <p className="text-slate-500 text-xs font-medium leading-relaxed">Akses modul pembelajaran interaktif dan kelas live.</p>
                       </div>
                     </button>
                     
                     <button
                       onClick={() => setView("quiz")}
-                      className="bg-white border text-left border-slate-200 hover:border-amber-300 p-6 rounded-[2rem] flex flex-col gap-6 transition-all shadow-sm hover:shadow-xl hover:shadow-amber-500/10 group relative overflow-hidden"
+                      className="bg-white border text-left border-slate-200 hover:border-amber-300 p-5 rounded-[1.5rem] flex flex-col gap-4 transition-all shadow-sm hover:shadow-lg hover:shadow-amber-500/10 group relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
-                      <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 transition-transform group-hover:scale-110 shadow-inner">
-                        <PenTool className="w-7 h-7" />
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
+                      <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600 transition-transform group-hover:scale-110 shadow-inner">
+                        <PenTool className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-xl text-slate-800 group-hover:text-amber-700 transition-colors mb-2">Latihan Soal</h4>
-                        <p className="text-slate-500 text-sm font-medium leading-relaxed">Uji pemahamanmu dan raih poin XP lebih banyak.</p>
+                        <h4 className="font-display font-bold text-lg text-slate-800 group-hover:text-amber-700 transition-colors mb-1.5">Latihan Soal</h4>
+                        <p className="text-slate-500 text-xs font-medium leading-relaxed">Uji pemahamanmu dan raih poin XP lebih banyak.</p>
                       </div>
                     </button>
                     
                     <button
                       onClick={() => setView("leaderboard")}
-                      className="bg-white border text-left border-slate-200 hover:border-orange-300 p-6 rounded-[2rem] flex flex-col gap-6 transition-all shadow-sm hover:shadow-xl hover:shadow-orange-500/10 group relative overflow-hidden"
+                      className="bg-white border text-left border-slate-200 hover:border-orange-300 p-5 rounded-[1.5rem] flex flex-col gap-4 transition-all shadow-sm hover:shadow-lg hover:shadow-orange-500/10 group relative overflow-hidden"
                     >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
-                      <div className="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 transition-transform group-hover:scale-110 shadow-inner">
-                        <Trophy className="w-7 h-7" />
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-orange-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110" />
+                      <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 transition-transform group-hover:scale-110 shadow-inner">
+                        <Trophy className="w-6 h-6" />
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-xl text-slate-800 group-hover:text-orange-700 transition-colors mb-2">Papan Peringkat</h4>
-                        <p className="text-slate-500 text-sm font-medium leading-relaxed">Lihat posisimu di antara teman-teman lainnya.</p>
+                        <h4 className="font-display font-bold text-lg text-slate-800 group-hover:text-orange-700 transition-colors mb-1.5">Papan Peringkat</h4>
+                        <p className="text-slate-500 text-xs font-medium leading-relaxed">Lihat posisimu di antara teman-teman lainnya.</p>
                       </div>
                     </button>
                   </div>
