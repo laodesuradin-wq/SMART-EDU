@@ -268,6 +268,19 @@ export function Tutorial({ module, onBack, onFinish }: TutorialProps) {
                   <h2 className="font-display font-bold text-2xl text-slate-900 mb-4">
                     {currentStep.title}
                   </h2>
+
+                  {currentStep.imageUrl && (
+                    <div className="mb-6 rounded-2xl overflow-hidden border-4 border-white shadow-lg aspect-video w-full bg-slate-100">
+                      <img 
+                        src={currentStep.imageUrl} 
+                        alt={currentStep.title} 
+                        className="w-full h-full object-cover" 
+                        referrerPolicy="no-referrer"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
+
                   <div className="bg-amber-50 border border-amber-100 rounded-2xl p-5 mb-4 inline-block text-left w-full shadow-inner">
                      <div className="flex items-start gap-3">
                         <FileText className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />

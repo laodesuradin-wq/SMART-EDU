@@ -19,6 +19,7 @@ export type Subject = {
   steps: {
     title: string;
     detail: string;
+    imageUrl?: string;
   }[];
 };
 
