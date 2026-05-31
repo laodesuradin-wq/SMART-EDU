@@ -95,7 +95,7 @@ export default function App() {
 
   if (view === "users") {
     return (
-      <div className="min-h-screen bg-slate-50 overflow-y-auto">
+      <div className="min-h-screen bg-slate-50 overflow-y-auto font-sans antialiased text-slate-800">
         <UsersList 
           users={users} 
           currentUserId={currentUserId}
@@ -128,16 +128,16 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col md:flex-row">
+    <div className="min-h-screen bg-slate-50 font-sans antialiased text-slate-800 flex flex-col md:flex-row">
       
       {/* Sidebar for Desktop */}
       <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 p-4 sticky top-0 h-screen">
         <div className="flex items-center gap-3 px-2 mb-10 mt-4">
           <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-            <span className="text-white font-display font-bold text-lg">S</span>
+            <span className="text-white font-display font-black text-xl">S</span>
           </div>
-          <h1 className="font-display font-bold text-xl text-slate-900 tracking-tight">
-            Siak <span className="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md">Mobile</span>
+          <h1 className="font-display font-black text-2xl text-slate-800 tracking-tight">
+            Siak <span className="text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-lg text-lg ml-0.5 relative -top-0.5">Mobile</span>
           </h1>
         </div>
 
@@ -168,12 +168,12 @@ export default function App() {
         
         {/* Mobile Header */}
         <header className="md:hidden bg-white border-b border-slate-200 sticky top-0 z-20 w-full px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-display font-bold text-sm">S</span>
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+              <span className="text-white font-display font-black text-lg">S</span>
             </div>
-            <h1 className="font-display font-bold text-lg text-slate-900 tracking-tight">
-              Siak <span className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded-sm">Mobile</span>
+            <h1 className="font-display font-black text-xl text-slate-800 tracking-tight">
+              Siak <span className="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-lg text-[15px] ml-0.5 relative -top-0.5">Mobile</span>
             </h1>
           </div>
           
@@ -253,6 +253,38 @@ export default function App() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                </div>
+
+                {/* Promotional Poster Banner */}
+                <div className="relative mt-2 overflow-hidden rounded-[2.5rem] p-8 md:p-10 shadow-lg group cursor-pointer hover:shadow-xl transition-shadow w-full focus:outline-none focus:ring-4 focus:ring-rose-300">
+                  {/* Background with abstract shapes */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-rose-500 to-orange-500" />
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 transition-transform duration-700 group-hover:scale-110 group-hover:bg-white/30" />
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-300/30 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4 group-hover:scale-125 transition-transform duration-700" />
+                  
+                  {/* Content */}
+                  <div className="relative z-10 flex flex-col items-start gap-4 w-full md:w-2/3">
+                    <div className="inline-flex items-center justify-center bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-white text-[10px] sm:text-xs font-bold tracking-widest uppercase border border-white/30 shadow-sm">
+                      <Sparkles className="w-3.5 h-3.5 mr-1.5" /> Spesial Bulan Ini
+                    </div>
+                    <h3 className="font-display font-black text-3xl md:text-5xl text-white tracking-tight leading-tight">
+                      Olimpiade <span className="text-yellow-200 drop-shadow-sm">Sains Siak</span>
+                    </h3>
+                    <p className="text-white/95 text-sm md:text-base font-medium mb-2 leading-relaxed">
+                      Tantang dirimu dan bersaing dengan pelajar terbaik di Siak. Menangkan beasiswa penuh dan hadiah jutaan!
+                    </p>
+                    <button className="bg-white text-rose-600 font-bold px-6 py-3.5 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all w-full sm:w-auto hover:bg-rose-50 focus:outline-none">
+                      Daftar Sekarang &rarr;
+                    </button>
+                  </div>
+                  
+                  {/* Floating Graphic Element */}
+                  <div className="absolute -right-8 -bottom-8 md:right-8 md:bottom-8 opacity-40 md:opacity-100 pointer-events-none group-hover:-translate-y-4 group-hover:-rotate-6 transition-all duration-700 ease-out">
+                     <div className="w-48 h-48 md:w-56 md:h-56 rounded-full bg-gradient-to-tr from-yellow-300 to-amber-500 shadow-[0_0_40px_rgba(251,191,36,0.4)] flex items-center justify-center border-4 border-white/30 backdrop-blur-sm relative">
+                       <Trophy className="w-24 h-24 md:w-28 md:h-28 text-white drop-shadow-xl" />
+                       <Sparkles className="absolute top-8 right-8 text-white w-8 h-8 animate-pulse" />
+                     </div>
                   </div>
                 </div>
 
@@ -537,13 +569,13 @@ function MobileNavItem({ icon, label, active, onClick }: { icon: React.ReactNode
     <button
       onClick={onClick}
       className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
-        active ? "text-indigo-600" : "text-slate-400 hover:text-slate-600"
+        active ? "text-indigo-600" : "text-slate-500 hover:text-slate-700"
       }`}
     >
-      <div className={`[&>svg]:w-5 [&>svg]:h-5 transition-transform ${active ? "scale-110" : ""}`}>
+      <div className={`[&>svg]:w-[22px] [&>svg]:h-[22px] transition-transform ${active ? "scale-110" : ""}`}>
         {icon}
       </div>
-      <span className="text-[10px] font-medium">{label}</span>
+      <span className={`text-[11px] tracking-tight leading-none ${active ? "font-bold" : "font-medium"}`}>{label}</span>
     </button>
   );
 }
