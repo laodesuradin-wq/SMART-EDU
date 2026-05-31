@@ -21,7 +21,7 @@ export function Chat({ onBack }: ChatProps) {
         {
           id: "init",
           role: "assistant",
-          content: "Halo! Saya **Sandra**, Asisten SiakEdu. Ada materi kependudukan yang belum kamu pahami? Mari belajar bersama!",
+          content: "Halo! Saya **Sandra**, Asisten Siak Mobile. Ada materi kependudukan yang belum kamu pahami? Mari belajar bersama!",
         }
       ]);
     }
@@ -104,7 +104,7 @@ export function Chat({ onBack }: ChatProps) {
            </div>
            <div>
              <h2 className="font-bold text-lg leading-tight font-display">Tanya Sandra</h2>
-             <p className="text-emerald-50 text-xs font-medium">Tutor AI SiakEdu</p>
+             <p className="text-emerald-50 text-xs font-medium">Tutor AI Siak Mobile</p>
            </div>
          </div>
       </div>

@@ -50,17 +50,39 @@ export function Tutorial({ module, onBack, onFinish }: TutorialProps) {
   };
 
   const toggleAudio = (text: string) => {
-     if (!('speechSynthesis' in window)) return;
+     if (!('speechSynthesis' in window)) {
+        alert("Browser tidak mendukung fitur suara.");
+        return;
+     }
      
      if (isPlayingAudio) {
        window.speechSynthesis.cancel();
        setIsPlayingAudio(false);
      } else {
-       setIsPlayingAudio(true);
+       window.speechSynthesis.cancel(); // Clear any pending speech
+       
        const utterance = new SpeechSynthesisUtterance(text);
        utterance.lang = 'id-ID';
        utterance.rate = 0.9;
-       utterance.onerror = () => setIsPlayingAudio(false);
+       utterance.volume = 1;
+       
+       // Handle voice selection
+       const voices = window.speechSynthesis.getVoices();
+       if (voices.length > 0) {
+          const indoVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+          if (indoVoice) utterance.voice = indoVoice;
+       }
+       
+       utterance.onstart = () => setIsPlayingAudio(true);
+       utterance.onend = () => setIsPlayingAudio(false);
+       utterance.onerror = (e) => {
+         console.error("Speech error", e);
+         setIsPlayingAudio(false);
+       };
+       
+       // Prevent garbage collection bug in some browsers (like Chrome/Safari)
+       // by attaching it to the window object temporarily
+       (window as any).currentUtterance = utterance;
        
        window.speechSynthesis.speak(utterance);
      }
@@ -184,6 +206,19 @@ export function Tutorial({ module, onBack, onFinish }: TutorialProps) {
                   1.2K
                </div>
             </div>
+
+            {module.sourceName && module.sourceUrl && (
+               <a 
+                 href={module.sourceUrl}
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-md border border-white/20 transition-colors z-30 pointer-events-auto"
+                 title="Buka sumber materi"
+               >
+                 <BookOpen className="w-3.5 h-3.5" />
+                 Materi: {module.sourceName}
+               </a>
+            )}
 
             <div className="absolute bottom-3 md:bottom-5 left-4 md:left-6 right-4 md:right-6 text-white pointer-events-none z-20">
               <h3 className="font-display font-bold text-sm md:text-xl text-shadow mb-0.5 md:mb-1">Sesi Interaktif: {module.title}</h3>

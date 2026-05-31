@@ -55,7 +55,10 @@ const generateSubjects = (kelas: number): Subject[] => {
       { title: "Kesimpulan & Penutup", detail: `Hebat sekali partisipasi kalian hari ini! Mari kita tarik kesimpulan sama-sama. Jadi, inti dari pelajaran ${s.title} kita hari ini adalah bagaimana kita memahaminya di kehidupan sehari-hari. Tetap semangat belajarnya ya! Kita tutup pelajaran hari ini, sampai jumpa di pertemuan berikutnya!` }
     ];
 
+    let video = "https://www.youtube.com/embed/gEBmJjS-fXw?autoplay=1&mute=1&loop=1";
+
     if (kelas === 1 && s.title === "Pendidikan Agama") {
+      video = "https://www.youtube.com/embed/8B0dCOUdcNU?autoplay=1&mute=1&loop=1";
       steps = [
         { title: "Bab 1: Aku Cinta Al-Qur'an", detail: "Assalamualaikum anak-anak yang shalih dan shalihah! Alhamdulillah hari ini kita bisa bertemu lagi. Hari ini, Ibu akan mengenalkan huruf hijaiyah. Ada yang sudah tahu huruf hijaiyah itu ada berapa? Yuk, kita buka pelajaran hari ini dengan membaca Basmalah bersama-sama!" },
         { title: "Bab 2: Mengenal Rukun Iman", detail: "Anak-anak, coba perhatikan gambar di layar Smart Board ini. Di sini tertulis ada 6 Rukun Iman. Rukun Iman yang pertama adalah Iman kepada Allah. Coba siapa yang berani menyebutkan rukun yang kedua? Wah pintar sekali! Yuk, kita bernyanyi lagu Rukun Iman agar lebih meresap di hati." },
@@ -70,7 +73,9 @@ const generateSubjects = (kelas: number): Subject[] => {
       title: s.title,
       icon: s.icon,
       description: `Materi LIVE ${s.title} untuk kelas ${kelas} sesuai standar Kurikulum Merdeka.`,
-      videoUrl: "https://www.youtube.com/embed/gEBmJjS-fXw?autoplay=1&mute=1&loop=1",
+      videoUrl: video,
+      sourceName: "Rumah Belajar Kemdikbudristek",
+      sourceUrl: "https://belajar.kemdikbud.go.id/",
       steps: steps
     };
   });

@@ -14,6 +14,8 @@ export type Subject = {
   icon: string;
   description: string;
   videoUrl?: string;
+  sourceName?: string;
+  sourceUrl?: string;
   steps: {
     title: string;
     detail: string;
