@@ -47,19 +47,33 @@ const generateSubjects = (kelas: number): Subject[] => {
     ];
   }
 
-  return subjectsList.map((s, idx) => ({
-    id: `k${kelas}_mapel${idx+1}`,
-    title: s.title,
-    icon: s.icon,
-    description: `Materi LIVE ${s.title} untuk kelas ${kelas} sesuai standar Kurikulum Merdeka.`,
-    videoUrl: "https://www.youtube.com/embed/gEBmJjS-fXw?autoplay=1&mute=1&loop=1",
-    steps: [
-      { title: "Sesi Pembuka", detail: `Tutor akan membuka sesi LIVE ${s.title} dengan pemaparan tujuan pembelajaran.` },
-      { title: "Materi Utama", detail: "Perhatikan dan catat poin penting dari penjelasan konsep secara langsung." },
-      { title: "Sesi Tanya Jawab", detail: "Gunakan fitur tanya jawab untuk bertanya jika ada materi yang belum dipahami kepada tutor." },
-      { title: "Kesimpulan", detail: `Tutor akan menarik kesimpulan untuk materi ${s.title} hari ini.` }
-    ]
-  }));
+  return subjectsList.map((s, idx) => {
+    let steps = [
+      { title: "Pendahuluan & Apersepsi", detail: `Halo anak-anak hebat! Selamat pagi! Wah, Ibu lihat semuanya sudah siap belajar ya hari ini. Bagaimana kabarnya? Hari ini kita akan belajar mata pelajaran ${s.title}. Tujuan kita hari ini adalah agar kalian bisa memahami materi ini dengan baik. Sebelum kita mulai, mari kita baca doa bersama-sama. Berdoa mulai!` },
+      { title: "Penyampaian Materi Inti", detail: `Baiklah, sekarang coba perhatikan layar Smart Board ini ya. Pada materi ${s.title} kali ini, pembahasannya sangat seru! Coba kalian amati dan perhatikan baik-baik konsep utamanya. Ibu akan menjelaskan secara perlahan. Jangan lupa siapkan buku catatannya ya, catat bagian-bagian yang penting.` },
+      { title: "Sesi Diskusi & Tanya Jawab", detail: `Oke anak-anak, penjelasan Ibu tentang ${s.title} tadi sudah selesai. Nah, sampai di sini, apakah ada yang ingin ditanyakan? Ayo, siapa yang berani bertanya atau mau membagikan pengalamannya? Jangan malu-malu ya, kita sama-sama belajar di sini!` },
+      { title: "Kesimpulan & Penutup", detail: `Hebat sekali partisipasi kalian hari ini! Mari kita tarik kesimpulan sama-sama. Jadi, inti dari pelajaran ${s.title} kita hari ini adalah bagaimana kita memahaminya di kehidupan sehari-hari. Tetap semangat belajarnya ya! Kita tutup pelajaran hari ini, sampai jumpa di pertemuan berikutnya!` }
+    ];
+
+    if (kelas === 1 && s.title === "Pendidikan Agama") {
+      steps = [
+        { title: "Bab 1: Aku Cinta Al-Qur'an", detail: "Assalamualaikum anak-anak yang shalih dan shalihah! Alhamdulillah hari ini kita bisa bertemu lagi. Hari ini, Ibu akan mengenalkan huruf hijaiyah. Ada yang sudah tahu huruf hijaiyah itu ada berapa? Yuk, kita buka pelajaran hari ini dengan membaca Basmalah bersama-sama!" },
+        { title: "Bab 2: Mengenal Rukun Iman", detail: "Anak-anak, coba perhatikan gambar di layar Smart Board ini. Di sini tertulis ada 6 Rukun Iman. Rukun Iman yang pertama adalah Iman kepada Allah. Coba siapa yang berani menyebutkan rukun yang kedua? Wah pintar sekali! Yuk, kita bernyanyi lagu Rukun Iman agar lebih meresap di hati." },
+        { title: "Bab 3: Membaca Basmalah & Hamdalah", detail: "Ayo siapa yang tadi pagi sarapan baca Bismillah dulu? Mengucapkan Basmalah sebelum memulai sesuatu dan Hamdalah setelah selesai itu tanda rasa syukur kita kepada Allah. Ayo, siapa yang mau ngasih contoh lagi kapan kita harus baca Bismillah?" },
+        { title: "Bab 4: Mengenal Rukun Islam", detail: "Selain Rukun Iman, kita juga wajib tahu Rukun Islam lho! Jumlahnya ada lima. Rukun Islam yang pertama adalah membaca dua kalimat Syahadat. Mari kita ikuti Ibu melafalkan bersama-sama: 'Asyhadu an laa ilaaha illallah...'" },
+        { title: "Bab 5: Nabi dan Rasul Panutanku", detail: "Sebagai kesimpulan belajar kita hari ini, kita harus selalu bersyukur dan meneladani sifat mulia para Nabi dan Rasul. Siapa yang mau jadi anak yang jujur seperti Nabi Muhammad? Jaga ibadahnya ya nak. Mari kita tutup dengan Hamdalah. Alhamdulillahi Rabbil 'Aalamin." }
+      ];
+    }
+
+    return {
+      id: `k${kelas}_mapel${idx+1}`,
+      title: s.title,
+      icon: s.icon,
+      description: `Materi LIVE ${s.title} untuk kelas ${kelas} sesuai standar Kurikulum Merdeka.`,
+      videoUrl: "https://www.youtube.com/embed/gEBmJjS-fXw?autoplay=1&mute=1&loop=1",
+      steps: steps
+    };
+  });
 };
 
 export const modules: ServiceModule[] = Array.from({ length: 12 }, (_, i) => {
